@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 export default function Home() {
   const [score, setScore] = useState(0);
   const [lifetimeScore, setLifetimeScore] = useState(0);
+  const [passivePoints, setPassivePoints] = useState(0);
 
   const incrementScore = () => {
     setScore(score + 1);
@@ -35,7 +36,12 @@ export default function Home() {
 
         {/* Shop / Sidebar */}
         <div className="w-full md:w-1/3 border-l border-gray-700 bg-zinc-950 p-6">
-          <h2 className="text-2xl font-semibold mb-4">Shop</h2>
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-semibold mb-4">Shop</h2>
+            <h2 className="text-2xl font-semibold mb-4 mr-6">
+              Per Second: {passivePoints}
+            </h2>
+          </div>
 
           <Separator />
 
@@ -43,7 +49,12 @@ export default function Home() {
             {/* Active Upgrades Buttons */}
             <ActiveUpgrades score={score} setScore={setScore} />
             {/* Passive Upgrades Buttons */}
-            <PassiveUpgrades score={score} setScore={setScore} />
+            <PassiveUpgrades
+              score={score}
+              setScore={setScore}
+              passive={passivePoints}
+              setPassive={setPassivePoints}
+            />
           </div>
         </div>
       </div>

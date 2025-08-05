@@ -1,6 +1,7 @@
 const upgrades = [
   {
     id: "Bot Clicker",
+    value: 0.1,
     levels: [
       {
         label: "Bot Clicker",

@@ -6,11 +6,15 @@ import { useState } from "react";
 interface PassiveUpgradesProps {
   score: number;
   setScore: React.Dispatch<React.SetStateAction<number>>;
+  passive: number;
+  setPassive: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
   score,
   setScore,
+  passive,
+  setPassive,
 }) => {
   const [upgradeLevels, setUpgradeLevels] = useState<number[]>(
     Array(upgrades.length).fill(0)
@@ -24,7 +28,10 @@ const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
 
     const maxLevelIndex = upgrades[upgradeIndex].levels.length - 1;
 
-    setScore((prev) => prev - cost);
+    setScore((score) => score - cost);
+
+    const newPassive = passive + upgrades[upgradeIndex].value;
+    setPassive(newPassive);
 
     setUpgradeLevels((prevLevels) => {
       const newLevels = [...prevLevels];
