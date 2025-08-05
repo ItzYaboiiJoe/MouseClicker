@@ -43,7 +43,7 @@ export default function Home() {
             {/* Active Upgrades Buttons */}
             <ActiveUpgrades score={score} setScore={setScore} />
             {/* Passive Upgrades Buttons */}
-            <PassiveUpgrades />
+            <PassiveUpgrades score={score} setScore={setScore} />
           </div>
         </div>
       </div>
