@@ -1,15 +1,31 @@
 import { Button } from "@/components/ui/button";
+import upgrades from "./activeUpgradesList";
 import TooltipWrapper from "../shared/toolTipWrapper";
 
-const ActiveUpgrades = () => {
+interface ActiveUpgradesProps {
+  score: number;
+  setScore: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({ score, setScore }) => {
+  const handlePurchase = (cost: number) => {
+    setScore((score) => score - cost);
+  };
+
   return (
     <div className="space-y-4">
       <h3>Active Upgrades</h3>
-      <TooltipWrapper content="Increases click power by 2x for 30 seconds.">
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-lg hover:cursor-pointer">
-          Double Tap
-        </Button>
-      </TooltipWrapper>
+      {upgrades.map((upgrade, index) => (
+        <TooltipWrapper key={index} content={upgrade.tooltip}>
+          <Button
+            onClick={() => handlePurchase(upgrade.cost)}
+            disabled={score < upgrade.cost}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 hover:cursor-pointer"
+          >
+            {upgrade.label} — {upgrade.cost}
+          </Button>
+        </TooltipWrapper>
+      ))}
     </div>
   );
 };

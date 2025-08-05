@@ -9,15 +9,17 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   const [score, setScore] = useState(0);
+  const [lifetimeScore, setLifetimeScore] = useState(0);
 
   const incrementScore = () => {
     setScore(score + 1);
+    setLifetimeScore(lifetimeScore + 1);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-800 via-gray-900 to-black text-white flex flex-col">
       {/* Top Bar */}
-      <Header score={score} />
+      <Header score={score} lifetime={lifetimeScore} />
 
       {/* Main Content */}
       <div className="flex flex-1 flex-col md:flex-row">
@@ -39,7 +41,7 @@ export default function Home() {
 
           <div className="space-y-4 my-4">
             {/* Active Upgrades Buttons */}
-            <ActiveUpgrades />
+            <ActiveUpgrades score={score} setScore={setScore} />
             {/* Passive Upgrades Buttons */}
             <PassiveUpgrades />
           </div>
