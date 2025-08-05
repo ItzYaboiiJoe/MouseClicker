@@ -1,4 +1,6 @@
 import Header from "@/components/shared/header";
+import ActiveUpgrades from "@/components/powerups/activeUpgrades";
+import PassiveUpgrades from "@/components/powerups/passiveUpgrades";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -25,19 +27,14 @@ export default function Home() {
         {/* Shop / Sidebar */}
         <div className="w-full md:w-1/3 border-l border-gray-700 bg-zinc-950 p-6">
           <h2 className="text-2xl font-semibold mb-4">Shop</h2>
+
           <Separator />
+
           <div className="space-y-4 my-4">
             {/* Active Upgrades Buttons */}
-            <h3>Active Upgrades</h3>
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-lg hover:cursor-pointer">
-              Double Tap
-            </Button>
-
+            <ActiveUpgrades />
             {/* Passive Upgrades Buttons */}
-            <h3>Passive Upgrades</h3>
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-lg hover:cursor-pointer">
-              Bot Clicker
-            </Button>
+            <PassiveUpgrades />
           </div>
         </div>
       </div>
