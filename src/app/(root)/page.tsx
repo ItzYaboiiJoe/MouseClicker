@@ -35,7 +35,7 @@ export default function Home() {
         </div>
 
         {/* Shop / Sidebar */}
-        <div className="w-full md:w-1/3 border-l border-gray-700 bg-zinc-950 p-6">
+        <div className="w-full md:max-w-lg border-l border-gray-700 bg-zinc-950 p-6">
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4">Shop</h2>
             <h2 className="text-2xl font-semibold mb-4 mr-6">
