@@ -1,25 +1,32 @@
+"use client";
+
+import { useState } from "react";
 import Header from "@/components/shared/header";
 import ActiveUpgrades from "@/components/powerups/activeUpgrades";
 import PassiveUpgrades from "@/components/powerups/passiveUpgrades";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 export default function Home() {
+  const [score, setScore] = useState(0);
+
+  const incrementScore = () => {
+    setScore(score + 1);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-800 via-gray-900 to-black text-white flex flex-col">
       {/* Top Bar */}
-      <Header />
+      <Header score={score} />
 
       {/* Main Content */}
       <div className="flex flex-1 flex-col md:flex-row">
         {/* Clicker Area */}
         <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <Button className="bg-emerald-500 hover:bg-emerald-600 text-2xl font-bold px-8 py-6 rounded-full shadow-lg transition-all active:scale-95 hover:cursor-pointer">
+          <Button
+            onClick={incrementScore}
+            className="bg-emerald-500 hover:bg-emerald-600 text-2xl font-bold px-8 py-6 rounded-full shadow-lg transition-all active:scale-95 hover:cursor-pointer"
+          >
             Click Me!
           </Button>
         </div>
