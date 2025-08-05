@@ -9,6 +9,8 @@ interface ActiveUpgradesProps {
 
 const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({ score, setScore }) => {
   const handlePurchase = (cost: number) => {
+    if (score < cost) return;
+
     setScore((score) => score - cost);
   };
 
@@ -19,7 +21,6 @@ const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({ score, setScore }) => {
         <TooltipWrapper key={index} content={upgrade.tooltip}>
           <Button
             onClick={() => handlePurchase(upgrade.cost)}
-            disabled={score < upgrade.cost}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 hover:cursor-pointer"
           >
             {upgrade.label} — {upgrade.cost}
