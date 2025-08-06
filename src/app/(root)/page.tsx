@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/shared/header";
 import ActiveUpgrades from "@/components/powerups/activeUpgrades";
 import PassiveUpgrades from "@/components/powerups/passiveUpgrades";
@@ -12,15 +12,29 @@ export default function Home() {
   const [lifetimeScore, setLifetimeScore] = useState(0);
   const [passivePoints, setPassivePoints] = useState(0);
 
+  // Increment score on button click
   const incrementScore = () => {
     setScore(score + 1);
     setLifetimeScore(lifetimeScore + 1);
   };
 
+  // Auto clicks based on upgrades
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (passivePoints > 0) {
+        const increment = passivePoints / 10;
+        setScore(score + increment);
+        setLifetimeScore(lifetimeScore + increment);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [passivePoints, score, lifetimeScore]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-800 via-gray-900 to-black text-white flex flex-col">
       {/* Top Bar */}
-      <Header score={score} lifetime={lifetimeScore} />
+      <Header score={Math.floor(score)} lifetime={Math.floor(lifetimeScore)} />
 
       {/* Main Content */}
       <div className="flex flex-1 flex-col md:flex-row">
@@ -39,7 +53,7 @@ export default function Home() {
           <div className="flex justify-between">
             <h2 className="text-2xl font-semibold mb-4">Shop</h2>
             <h2 className="text-2xl font-semibold mb-4 mr-6">
-              Per Second: {passivePoints}
+              Per Second: {passivePoints.toFixed(1)}
             </h2>
           </div>
 
