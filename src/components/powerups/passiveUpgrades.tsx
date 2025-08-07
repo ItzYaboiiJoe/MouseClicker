@@ -78,7 +78,7 @@ const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
           >
             <Button
               onClick={() => handlePurchase(index, currentLevel.cost)}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 hover:cursor-pointer"
+              className="w-full bg-blue-600 hover:bg-blue-800 hover:cursor-pointer"
             >
               {isMaxed
                 ? "Max Upgrade Reached"

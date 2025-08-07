@@ -48,7 +48,7 @@ const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({
         <TooltipWrapper key={index} content={upgrade.tooltip}>
           <Button
             onClick={() => handlePurchase(index, upgrade.cost)}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 hover:cursor-pointer"
+            className="w-full bg-blue-600 hover:bg-blue-800 hover:cursor-pointer"
           >
             {upgrade.label} — {upgrade.cost}
           </Button>
