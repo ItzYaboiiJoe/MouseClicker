@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Header from "@/components/shared/header";
 import ActiveUpgrades from "@/components/powerups/activeUpgrades";
 import PassiveUpgrades from "@/components/powerups/passiveUpgrades";
@@ -13,6 +13,56 @@ export default function Home() {
   const [passivePoints, setPassivePoints] = useState(0);
   const [clickPower, setClickPower] = useState(1);
   const [activeDuration, setActiveDuration] = useState(0);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Saving Data to Local Storage
+  useEffect(() => {
+    const data = {
+      score: Math.floor(score),
+      lifeTimeScore: Math.floor(lifetimeScore),
+      passivePower: passivePoints.toFixed(1),
+    };
+    localStorage.setItem("mouseClickerData", JSON.stringify(data));
+  }, [score, lifetimeScore, passivePoints]);
+
+  //function to save data to as a txt file
+  const saveDataToFile = () => {
+    const saveData = localStorage.getItem("mouseClickerData");
+    if (!saveData) return;
+
+    const encoded = btoa(saveData);
+
+    const file = new Blob([encoded], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(file);
+    link.download = "mouseClickerData.txt";
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  //function to load data from a txt file
+  const loadDataFromFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const encoded = String(reader.result || "");
+      const decoded = atob(encoded);
+      const data = JSON.parse(decoded);
+
+      setScore(Number(data.score));
+      setLifetimeScore(Number(data.lifeTimeScore));
+      setPassivePoints(Number(data.passivePower));
+
+      localStorage.setItem("mouseClickerData", decoded);
+
+      event.target.value = "";
+    };
+
+    reader.readAsText(file);
+  };
 
   // Increment score on button click
   const incrementScore = () => {
@@ -105,6 +155,31 @@ export default function Home() {
               setScore={setScore}
               passive={passivePoints}
               setPassive={setPassivePoints}
+            />
+          </div>
+
+          <Separator />
+
+          {/* Save and Load */}
+          <div className="flex justify-between mt-4">
+            <Button
+              onClick={saveDataToFile}
+              className="bg-gray-700 text-lg active:scale-95 hover:cursor-pointer"
+            >
+              Save
+            </Button>
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              className="bg-gray-700 text-lg active:scale-95 hover:cursor-pointer"
+            >
+              Load
+            </Button>
+            <input
+              type="file"
+              accept=".txt"
+              ref={fileInputRef}
+              onChange={loadDataFromFile}
+              style={{ display: "none" }}
             />
           </div>
         </div>
