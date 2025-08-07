@@ -11,11 +11,12 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [lifetimeScore, setLifetimeScore] = useState(0);
   const [passivePoints, setPassivePoints] = useState(0);
+  const [clickPower, setClickPower] = useState(1);
 
   // Increment score on button click
   const incrementScore = () => {
-    setScore(score + 1);
-    setLifetimeScore(lifetimeScore + 1);
+    setScore(score + clickPower);
+    setLifetimeScore(lifetimeScore + clickPower);
   };
 
   // Auto clicks based on upgrades
@@ -61,7 +62,12 @@ export default function Home() {
 
           <div className="space-y-4 my-4">
             {/* Active Upgrades Buttons */}
-            <ActiveUpgrades score={score} setScore={setScore} />
+            <ActiveUpgrades
+              score={score}
+              setScore={setScore}
+              clickPower={clickPower}
+              setClickPower={setClickPower}
+            />
             {/* Passive Upgrades Buttons */}
             <PassiveUpgrades
               score={score}
