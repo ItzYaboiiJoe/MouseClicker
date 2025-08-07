@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import upgrades from "./activeUpgradesList";
 import TooltipWrapper from "../shared/toolTipWrapper";
@@ -17,9 +18,12 @@ const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({
   setClickPower,
   setActiveDuration,
 }) => {
-  const handlePurchase = (upgradeIndex: number, cost: number) => {
-    if (score < cost) return;
+  const [isActive, setIsActive] = useState(false);
 
+  const handlePurchase = (upgradeIndex: number, cost: number) => {
+    if (score < cost || isActive) return;
+
+    setIsActive(true);
     setScore((score) => score - cost);
 
     // Storing and setting up the click powers
@@ -32,6 +36,7 @@ const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({
     setActiveDuration(duration / 1000);
     setTimeout(() => {
       setClickPower(originalClickPower);
+      setIsActive(false);
     }, duration);
   };
 
