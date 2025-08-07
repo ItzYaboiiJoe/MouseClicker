@@ -12,6 +12,7 @@ export default function Home() {
   const [lifetimeScore, setLifetimeScore] = useState(0);
   const [passivePoints, setPassivePoints] = useState(0);
   const [clickPower, setClickPower] = useState(1);
+  const [activeDuration, setActiveDuration] = useState(0);
 
   // Increment score on button click
   const incrementScore = () => {
@@ -32,6 +33,23 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [passivePoints, score, lifetimeScore]);
 
+  // Countdown for active upgrade duration
+  useEffect(() => {
+    if (activeDuration <= 0) return;
+
+    const interval = setInterval(() => {
+      setActiveDuration((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeDuration]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-800 via-gray-900 to-black text-white flex flex-col">
       {/* Top Bar */}
@@ -47,6 +65,8 @@ export default function Home() {
           >
             Click Me!
           </Button>
+          <p className="mt-4">Current Click Power: {clickPower}</p>
+          <p className="mt-4">Active Duration: {activeDuration}</p>
         </div>
 
         {/* Shop / Sidebar */}
@@ -67,6 +87,7 @@ export default function Home() {
               setScore={setScore}
               clickPower={clickPower}
               setClickPower={setClickPower}
+              setActiveDuration={setActiveDuration}
             />
             {/* Passive Upgrades Buttons */}
             <PassiveUpgrades

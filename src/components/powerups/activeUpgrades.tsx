@@ -7,6 +7,7 @@ interface ActiveUpgradesProps {
   setScore: React.Dispatch<React.SetStateAction<number>>;
   clickPower: number;
   setClickPower: React.Dispatch<React.SetStateAction<number>>;
+  setActiveDuration: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({
@@ -14,14 +15,24 @@ const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({
   setScore,
   clickPower,
   setClickPower,
+  setActiveDuration,
 }) => {
   const handlePurchase = (upgradeIndex: number, cost: number) => {
     if (score < cost) return;
 
     setScore((score) => score - cost);
 
+    // Storing and setting up the click powers
+    const originalClickPower = clickPower;
     const newClickPower = clickPower * upgrades[upgradeIndex].effect;
     setClickPower(newClickPower);
+
+    // Reverting click power after the upgrade duration
+    const duration = upgrades[upgradeIndex].duration * 1000;
+    setActiveDuration(duration / 1000);
+    setTimeout(() => {
+      setClickPower(originalClickPower);
+    }, duration);
   };
 
   return (
