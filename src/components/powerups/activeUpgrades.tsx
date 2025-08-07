@@ -21,6 +21,7 @@ const ActiveUpgrades: React.FC<ActiveUpgradesProps> = ({
   const [isActive, setIsActive] = useState(false);
 
   const handlePurchase = (upgradeIndex: number, cost: number) => {
+    // Buttons wont work if an active upgrade is already in effect or if the user doesn't have enough points
     if (score < cost || isActive) return;
 
     setIsActive(true);

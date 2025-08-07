@@ -58,15 +58,25 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex flex-1 flex-col md:flex-row">
         {/* Clicker Area */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
-          <Button
-            onClick={incrementScore}
-            className="bg-emerald-500 hover:bg-emerald-600 text-2xl font-bold px-8 py-6 rounded-full shadow-lg transition-all active:scale-95 hover:cursor-pointer"
-          >
-            Click Me!
-          </Button>
-          <p className="mt-4">Current Click Power: {clickPower}</p>
-          <p className="mt-4">Active Duration: {activeDuration}</p>
+        <div className="flex-1 flex flex-col items-center p-8">
+          {/* Centered Button */}
+          <div className="flex-grow flex items-center justify-center">
+            <Button
+              onClick={incrementScore}
+              className="bg-emerald-500 hover:bg-emerald-600 text-2xl font-bold px-8 py-6 rounded-full shadow-lg transition-all active:scale-95 hover:cursor-pointer"
+            >
+              Click Me!
+            </Button>
+          </div>
+
+          {/* Bottom Info */}
+          <div className="text-center h-[4.5rem]">
+            <p className="mt-4">Current Click Power: {clickPower}</p>
+            {/* Displays the Duration only when its active */}
+            {activeDuration > 0 && (
+              <p className="mt-4">Active Duration: {activeDuration}</p>
+            )}
+          </div>
         </div>
 
         {/* Shop / Sidebar */}
