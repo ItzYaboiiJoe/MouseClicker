@@ -23,36 +23,34 @@ const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
     Array(upgrades.length).fill(false)
   );
 
+  // Saving upgrade levels to local storage
   useEffect(() => {
-    const savedLevels = localStorage.getItem("upgradeLevels");
-    const savedFinal = localStorage.getItem("finalLevelPurchased");
-
-    if (savedLevels) setUpgradeLevels(JSON.parse(savedLevels));
-    if (savedFinal) setFinalLevelPurchased(JSON.parse(savedFinal));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("upgradeLevels", JSON.stringify(upgradeLevels));
-    localStorage.setItem(
-      "finalLevelPurchased",
-      JSON.stringify(finalLevelPurchased)
-    );
+    const upgradeData = {
+      levels: upgradeLevels,
+      finalPurchased: finalLevelPurchased,
+    };
+    localStorage.setItem("passiveUpgradeData", JSON.stringify(upgradeData));
   }, [upgradeLevels, finalLevelPurchased]);
 
   const handlePurchase = (upgradeIndex: number, cost: number) => {
+    // Button wont work if the user doesn't have enough points
     if (score < cost) return;
 
+    // Fetching last index of levels array
     const maxLevelIndex = upgrades[upgradeIndex].levels.length - 1;
 
     setScore((score) => score - cost);
 
+    // Increasing passive power
     const newPassive = passive + upgrades[upgradeIndex].value;
     setPassive(newPassive);
 
+    // Updating the level of the purchased upgrade
     setUpgradeLevels((prevLevels) => {
       const newLevels = [...prevLevels];
       const currentLevel = newLevels[upgradeIndex];
 
+      // Marking the final level as purchased to disable further purchases
       if (currentLevel === maxLevelIndex) {
         setFinalLevelPurchased((prev) => {
           const updated = [...prev];
@@ -61,6 +59,7 @@ const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
         });
       }
 
+      // Only update the button to the next level if not at max level
       if (currentLevel < maxLevelIndex) {
         newLevels[upgradeIndex] += 1;
       }
