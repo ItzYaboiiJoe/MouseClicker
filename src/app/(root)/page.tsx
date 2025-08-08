@@ -29,16 +29,20 @@ export default function Home() {
   //function to save data to as a txt file
   const saveDataToFile = () => {
     const saveData = localStorage.getItem("mouseClickerData");
-    if (!saveData) return;
+    const upgradeData = localStorage.getItem("passiveUpgradeData");
+    if (!saveData || !upgradeData) return;
 
     const encoded = btoa(saveData);
+    const upgradeEncoded = btoa(upgradeData);
 
-    const file = new Blob([encoded], { type: "text/plain" });
+    const file = new Blob([encoded, upgradeEncoded], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(file);
     link.download = "mouseClickerData.txt";
     link.click();
     URL.revokeObjectURL(link.href);
+
+    console.log("Saved", saveData, upgradeData);
   };
 
   //function to load data from a txt file
