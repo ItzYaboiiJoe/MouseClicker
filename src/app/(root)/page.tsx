@@ -32,17 +32,19 @@ export default function Home() {
     const upgradeData = localStorage.getItem("passiveUpgradeData");
     if (!saveData || !upgradeData) return;
 
-    const encoded = btoa(saveData);
-    const upgradeEncoded = btoa(upgradeData);
+    const fullData = {
+      saveData: JSON.parse(saveData),
+      upgradeData: JSON.parse(upgradeData),
+    };
 
-    const file = new Blob([encoded, upgradeEncoded], { type: "text/plain" });
+    const encoded = btoa(JSON.stringify(fullData));
+
+    const file = new Blob([encoded], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(file);
     link.download = "mouseClickerData.txt";
     link.click();
     URL.revokeObjectURL(link.href);
-
-    console.log("Saved", saveData, upgradeData);
   };
 
   //function to load data from a txt file
@@ -54,13 +56,23 @@ export default function Home() {
     reader.onload = () => {
       const encoded = String(reader.result || "");
       const decoded = atob(encoded);
-      const data = JSON.parse(decoded);
+      const fullData = JSON.parse(decoded);
 
-      setScore(Number(data.score));
-      setLifetimeScore(Number(data.lifeTimeScore));
-      setPassivePoints(Number(data.passivePower));
+      // Update clicker stats
+      const saveData = fullData.saveData;
+      setScore(Number(saveData.score));
+      setLifetimeScore(Number(saveData.lifeTimeScore));
+      setPassivePoints(Number(saveData.passivePower));
+      localStorage.setItem("mouseClickerData", JSON.stringify(saveData));
 
-      localStorage.setItem("mouseClickerData", decoded);
+      // Update upgrade levels
+      const upgradeData = fullData.upgradeData;
+      localStorage.setItem("passiveUpgradeData", JSON.stringify(upgradeData));
+
+      // Fire custom event to notify PassiveUpgrades
+      window.dispatchEvent(
+        new CustomEvent("load-passive-upgrades", { detail: upgradeData })
+      );
 
       event.target.value = "";
     };

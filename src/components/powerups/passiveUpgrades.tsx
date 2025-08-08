@@ -10,6 +10,11 @@ interface PassiveUpgradesProps {
   setPassive: React.Dispatch<React.SetStateAction<number>>;
 }
 
+type PassiveUpgradeData = {
+  levels: number[];
+  finalPurchased: boolean[];
+};
+
 const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
   score,
   setScore,
@@ -31,6 +36,23 @@ const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
     };
     localStorage.setItem("passiveUpgradeData", JSON.stringify(upgradeData));
   }, [upgradeLevels, finalLevelPurchased]);
+
+  useEffect(() => {
+    const handleLoad = (e: Event) => {
+      const customEvent = e as CustomEvent<PassiveUpgradeData>;
+      const data = customEvent.detail;
+
+      if (data?.levels && data?.finalPurchased) {
+        setUpgradeLevels(data.levels);
+        setFinalLevelPurchased(data.finalPurchased);
+      }
+    };
+
+    window.addEventListener("load-passive-upgrades", handleLoad);
+    return () => {
+      window.removeEventListener("load-passive-upgrades", handleLoad);
+    };
+  }, []);
 
   const handlePurchase = (upgradeIndex: number, cost: number) => {
     // Button wont work if the user doesn't have enough points
