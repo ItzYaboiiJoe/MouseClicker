@@ -16,6 +16,31 @@ export default function Home() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Load data from local storage on initial render
+  useEffect(() => {
+    const savedData = localStorage.getItem("mouseClickerData");
+    const upgradeData = localStorage.getItem("passiveUpgradeData");
+
+    if (savedData) {
+      const parsed = JSON.parse(savedData);
+      setScore(Number(parsed.score) || 0);
+      setLifetimeScore(Number(parsed.lifeTimeScore) || 0);
+      setPassivePoints(Number(parsed.passivePower) || 0);
+    }
+
+    if (upgradeData) {
+      const parsedUpgrades = JSON.parse(upgradeData);
+      // Store it back just in case, and notify PassiveUpgrades
+      localStorage.setItem(
+        "passiveUpgradeData",
+        JSON.stringify(parsedUpgrades)
+      );
+      window.dispatchEvent(
+        new CustomEvent("load-passive-upgrades", { detail: parsedUpgrades })
+      );
+    }
+  }, []);
+
   // Saving Data to Local Storage
   useEffect(() => {
     const data = {

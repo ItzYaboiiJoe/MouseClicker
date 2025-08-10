@@ -27,31 +27,45 @@ const PassiveUpgrades: React.FC<PassiveUpgradesProps> = ({
   const [finalLevelPurchased, setFinalLevelPurchased] = useState<boolean[]>(
     Array(upgrades.length).fill(false)
   );
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const raw = localStorage.getItem("passiveUpgradeData");
+    if (raw) {
+      const parsed: PassiveUpgradeData = JSON.parse(raw);
+      if (
+        Array.isArray(parsed.levels) &&
+        Array.isArray(parsed.finalPurchased)
+      ) {
+        setUpgradeLevels(parsed.levels);
+        setFinalLevelPurchased(parsed.finalPurchased);
+      }
+    }
+    setHydrated(true);
+  }, []);
 
   // Saving upgrade levels to local storage
   useEffect(() => {
-    const upgradeData = {
+    if (!hydrated) return;
+    const upgradeData: PassiveUpgradeData = {
       levels: upgradeLevels,
       finalPurchased: finalLevelPurchased,
     };
     localStorage.setItem("passiveUpgradeData", JSON.stringify(upgradeData));
-  }, [upgradeLevels, finalLevelPurchased]);
+  }, [upgradeLevels, finalLevelPurchased, hydrated]);
 
   useEffect(() => {
     const handleLoad = (e: Event) => {
-      const customEvent = e as CustomEvent<PassiveUpgradeData>;
-      const data = customEvent.detail;
-
-      if (data?.levels && data?.finalPurchased) {
-        setUpgradeLevels(data.levels);
-        setFinalLevelPurchased(data.finalPurchased);
+      const { detail } = e as CustomEvent<PassiveUpgradeData>;
+      if (detail?.levels && detail?.finalPurchased) {
+        setUpgradeLevels(detail.levels);
+        setFinalLevelPurchased(detail.finalPurchased);
+        localStorage.setItem("passiveUpgradeData", JSON.stringify(detail));
       }
     };
-
     window.addEventListener("load-passive-upgrades", handleLoad);
-    return () => {
+    return () =>
       window.removeEventListener("load-passive-upgrades", handleLoad);
-    };
   }, []);
 
   const handlePurchase = (upgradeIndex: number, cost: number) => {
